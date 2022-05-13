@@ -1,0 +1,8 @@
+package com.lms.accesslibrary.service;
+
+public interface MemberService {
+	public boolean checkoutBookItem(String bookItemBarcode);
+	public boolean returnBookItem(String bookItemBarcode);
+	public boolean renewBookItem(String bookItemBarcode);
+	public String payFine(String bookItemBarcode);
+}

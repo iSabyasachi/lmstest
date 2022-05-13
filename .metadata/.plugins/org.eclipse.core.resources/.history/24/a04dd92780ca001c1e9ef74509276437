@@ -1,0 +1,11 @@
+package com.lms.accesslibrary.utility;
+
+public class DateFormatUtility {
+	
+	public Date convertToDateViaInstant(LocalDate dateToConvert) {
+	    return java.util.Date.from(dateToConvert.atStartOfDay()
+	      .atZone(ZoneId.systemDefault())
+	      .toInstant());
+	}
+
+}

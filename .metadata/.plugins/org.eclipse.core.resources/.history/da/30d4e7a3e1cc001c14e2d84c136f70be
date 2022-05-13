@@ -1,0 +1,20 @@
+package com.lms.accesslibrary.dto;
+
+import lombok.Data;
+
+@Data
+public class CheckoutResponse {
+	private String checkoutTtrackingNumber;
+	private String message;
+
+	public String getCheckoutTtrackingNumber() {
+		return checkoutTtrackingNumber;
+	}
+
+	public void setCheckoutTtrackingNumber(String checkoutTtrackingNumber) {
+		this.checkoutTtrackingNumber = checkoutTtrackingNumber;
+	}
+
+	
+	
+}

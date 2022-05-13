@@ -1,0 +1,50 @@
+package com.lms.accesslibrary.bo;
+
+import java.util.List;
+
+import javax.persistence.criteria.Order;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lms.accesslibrary.dao.BookItemRepository;
+import com.lms.accesslibrary.entity.library.book.Book;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.enums.BookStatus;
+
+@Component
+public class BookItemBO {
+	@Autowired
+	BookItemRepository bookItemRepository;
+	
+	public BookItem findByBarcode(String barcode) {
+		return bookItemRepository.findByTrackingNumber(barcode);
+	};
+	
+	public BookItem findByUserIdOrderByCreatedTSDesc(String id){
+		//List<BookItem> bookItems = bookItemRepository.findByUserIdOrderByCreatedTSDesc(id);
+		String email= "sabyasachi@gmail.com";
+		List<Order> bookItems = bookItemRepository.findByUserEmailOrderByCreatedTSDesc(email);
+
+		if(bookItems != null && bookItems.size() > 0) {
+			return bookItems.get(0);
+		}
+		return null;
+	};
+	
+	
+	public boolean checkout(Book book,BookItem bookItem, long userId) {
+	    if(book.getIsReferenceOnly().equals("1")) {
+	      return false;
+	    }
+	    if(!BookLending.lendBook(book.getBarcode(), userId)){
+	      return false;
+	    }
+	    bookItem.setStatus(BookStatus.LOANED.name());
+	    return true;
+	  }
+
+	public void save(BookItem bookItem) {
+		// TODO 		
+	}
+}

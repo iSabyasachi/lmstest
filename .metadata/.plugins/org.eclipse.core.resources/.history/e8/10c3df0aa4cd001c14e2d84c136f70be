@@ -1,0 +1,15 @@
+package com.lms.accesslibrary.dao.factory;
+
+import com.lms.accesslibrary.dao.BookItemRepository;
+
+public abstract class RepositoryFactory {
+	
+	public static final RepositoryFactory instance;
+	
+	static {
+		instance = new GenericRepositoryFactory();
+	}
+
+	public abstract BookItemRepository getBookItemRepository();
+
+}

@@ -1,0 +1,82 @@
+package com.lms.accesslibrary.entity.library.user;
+
+import java.util.Date;
+
+import com.lms.accesslibrary.bo.BookLending;
+import com.lms.accesslibrary.bo.BookReservation;
+import com.lms.accesslibrary.constant.Constants;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.enums.ReservationStatus;
+
+public class Member extends Account {
+
+	private Date dateOfMembership;
+	private int totalBooksCheckedout;
+
+	public Date getDateOfMembership() {
+		return dateOfMembership;
+	}
+
+	public void setDateOfMembership(Date dateOfMembership) {
+		this.dateOfMembership = dateOfMembership;
+	}
+
+	public int getTotalBooksCheckedout() {
+		return this.totalBooksCheckedout;
+	}
+
+	public void setTotalBooksCheckedout(int totalBooksCheckedout) {
+		this.totalBooksCheckedout = totalBooksCheckedout;
+	}
+
+	public boolean reserveBookItem(BookItem bookItem) {
+		return false;
+	};
+
+	private void incrementTotalBooksCheckedout() {
+
+	}
+
+	@Override
+	public boolean resetPassword() {
+		return false;
+	};
+
+	// Check out
+	public boolean checkoutBookItem(BookItem bookItem) {
+		if (this.getTotalBooksCheckedout() >= Constants.MAX_BOOKS_ISSUED_TO_A_USER) {
+			System.out.println("The user has already checked-out maximum number of books");
+			return false;
+		}
+		BookReservation bookReservation = BookReservation.fetchReservationDetails(bookItem.getBarcode());
+		if (bookReservation != null && bookReservation.getMemberId() != this.getId()) {
+			// book item has a pending reservation from another user
+			System.out.println("This book is reserved by another member");
+			return false;
+		} else if (bookReservation != null) {
+			// book item has a pending reservation from the give member, update it
+			bookReservation.setStatus(ReservationStatus.COMPLETED);
+		}
+
+		if (!bookItem.checkout(this.getId())) {
+			return false;
+		}
+
+		this.incrementTotalBooksCheckedout();
+
+		return true;
+	}
+
+	private void checkForFine(String bookItemBarcode) {
+		BookLending bookLending = BookLending.fetchLendingDetails(bookItemBarcode);
+		Date dueDate = bookLending.getDueDate();
+		Date today = new Date();
+		// check if the book has been returned within the due date
+		if (today.compareTo(dueDate) > 0) {
+			long diff = todayDate.getTime() - dueDate.getTime();
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			Fine.collectFine(memberId, diffDays);
+		}
+	}
+
+}

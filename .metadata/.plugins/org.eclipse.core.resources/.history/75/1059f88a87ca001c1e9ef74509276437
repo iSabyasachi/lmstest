@@ -1,0 +1,12 @@
+package com.lms.accesslibrary.dto;
+
+import lombok.Data;
+
+@Data
+public class Lend {
+	private Customer customer;
+    private Address shippingAddress;
+    private Address billingAddress;
+    private Order order;
+    private Set<OrderItem> orderItems;
+}

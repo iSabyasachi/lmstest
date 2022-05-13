@@ -1,0 +1,14 @@
+package com.lms.accesslibrary.service;
+
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+
+public class CheckoutServiceImpl implements CheckoutService {
+
+	@Override
+	public CheckoutResponse checkoutBook(Checkout checkout) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

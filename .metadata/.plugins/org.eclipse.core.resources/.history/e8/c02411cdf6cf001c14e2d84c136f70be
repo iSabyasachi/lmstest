@@ -1,0 +1,20 @@
+package com.lms.accesslibrary.utility;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+
+public class DateFormatUtility {
+	
+	public static Date convertToDateViaInstant(LocalDate dateToConvert) {
+	    return java.util.Date.from(dateToConvert.atStartOfDay()
+	      .atZone(ZoneId.systemDefault())
+	      .toInstant());
+	}
+	
+	public static Date calculateDueDate(Date checkOutDate, int days) {
+		Calendar calendar = new Calendar();
+	}
+
+}

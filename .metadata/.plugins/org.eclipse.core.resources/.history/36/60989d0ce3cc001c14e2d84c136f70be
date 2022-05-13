@@ -1,0 +1,47 @@
+package com.lms.accesslibrary.dto;
+
+import java.util.Set;
+
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.entity.library.user.Address;
+import com.lms.accesslibrary.entity.library.user.User;
+
+import lombok.Data;
+
+@Data
+public class Checkout {
+	private User user;
+    private Address memberAddress;    
+    private BookItem checkoutItem;
+    private Set<BookItem> checkoutItems;
+    private double finePaid
+	
+    
+    
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Address getMemberAddress() {
+		return memberAddress;
+	}
+	public void setMemberAddress(Address memberAddress) {
+		this.memberAddress = memberAddress;
+	}
+	public BookItem getCheckoutItem() {
+		return checkoutItem;
+	}
+	public void setCheckoutItem(BookItem checkoutItem) {
+		this.checkoutItem = checkoutItem;
+	}
+	public Set<BookItem> getCheckoutItems() {
+		return checkoutItems;
+	}
+	public void setCheckoutItems(Set<BookItem> checkoutItems) {
+		this.checkoutItems = checkoutItems;
+	}
+    
+    
+}

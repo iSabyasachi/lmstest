@@ -1,0 +1,12 @@
+package com.lms.accesslibrary.service;
+
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+
+public interface CheckoutService {
+	public CheckoutResponse checkoutBook(Checkout checkout);
+	public CheckoutResponse checkoutBookItem(String userId, String bookItemBarcode);
+	public CheckoutResponse returnBookItem(String userId, String bookItemBarcode);
+	public CheckoutResponse renewBookItem(String userId, String bookItemBarcode);
+	public CheckoutResponse payFine(String userId, String bookItemBarcode, double finePaid);
+}

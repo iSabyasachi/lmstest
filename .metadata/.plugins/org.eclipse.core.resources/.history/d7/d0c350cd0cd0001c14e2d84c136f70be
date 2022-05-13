@@ -1,0 +1,62 @@
+package com.lms.accesslibrary.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.bo.BookItemBO;
+import com.lms.accesslibrary.bo.UserBO;
+import com.lms.accesslibrary.dao.UserRepository;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.entity.library.user.User;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	private UserRepository memberRepository;
+	
+	@Autowired
+	private UserBO userBO;
+	
+	@Autowired
+	private BookItemBO bookItemBO;
+
+	@Override
+	public String blockUser(String userId, String blockUserId) {
+		User librarian = userBO.findByUserId(userId).get();
+		if(librarian.getType().equals("LIBRARIAN")) {
+			User member = userBO.findByUserId(blockUserId);
+			member.setBlockUser(1);
+			userBO.save(member);
+			return "SUCCESS";
+		}		
+		return "FAILED";
+	}
+
+	@Override
+	public String unBlockUser(String userId, String blockUserId) {
+		User librarian = userBO.findByUserId(userId);
+		if(librarian.getType().equals("LIBRARIAN")) {
+			User member = userBO.findByUserId(blockUserId);
+			member.setBlockUser(0);
+			userBO.save(member);
+			return "SUCCESS";
+		}		
+		return "FAILED";
+	}
+
+	@Override
+	public String addBookItem(BookItem bookItem) {
+		bookItemBO.save(bookItem);
+		return "SUCCESS";
+	}
+
+	@Override
+	public boolean resetPassword(String userId, String resetUserId) {
+		//TO-DO
+		return false;
+	}
+	
+	
+	
+
+}

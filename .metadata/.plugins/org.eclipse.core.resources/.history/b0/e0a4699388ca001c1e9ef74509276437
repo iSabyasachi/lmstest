@@ -1,0 +1,11 @@
+package com.lms.accesslibrary.dto;
+
+public class LendResponse {
+	private final String lendTrackingNumber;
+
+	public String getLendTrackingNumber() {
+		return lendTrackingNumber;
+	}
+	
+	
+}

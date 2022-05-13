@@ -1,0 +1,17 @@
+package com.lms.accesslibrary.service;
+
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.dao.MemberRepository;
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+
+@Service
+public class MemberServiceImpl implements MemberService {
+	
+	
+
+}

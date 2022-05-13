@@ -1,0 +1,11 @@
+package com.lms.accesslibrary.bo;
+
+import com.lms.accesslibrary.entity.library.book.BookItem;
+
+public class User {
+	
+	BookItem findByBarcode(String barcode) {
+		
+	};
+
+}

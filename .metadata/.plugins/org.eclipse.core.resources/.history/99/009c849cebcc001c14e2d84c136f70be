@@ -1,0 +1,46 @@
+package com.lms.accesslibrary.entity.library.section;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_rack")
+public class Rack {
+	private long id;
+	private int number;
+	private String locationIdentifier;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	@Column(name="number")
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	@Column(name="location_identifier")
+	public String getLocationIdentifier() {
+		return locationIdentifier;
+	}
+
+	public void setLocationIdentifier(String locationIdentifier) {
+		this.locationIdentifier = locationIdentifier;
+	}
+
+}

@@ -1,0 +1,16 @@
+package com.lms.accesslibrary.bo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.lms.accesslibrary.dao.BookItemRepository;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+
+public class User {
+	@Autowired
+	BookItemRepository bookItemRepository;
+	
+	BookItem findByBarcode(String barcode) {
+		return 
+	};
+
+}

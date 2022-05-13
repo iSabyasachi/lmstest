@@ -1,0 +1,63 @@
+package com.lms.accesslibrary.service;
+
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.bo.BookReservation;
+import com.lms.accesslibrary.constant.Constants;
+import com.lms.accesslibrary.dao.MemberRepository;
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.enums.ReservationStatus;
+
+@Service
+public class MemberServiceImpl implements MemberService {
+
+	@Override
+	public String checkoutBookItem(String bookItemBarcode) {
+		if (this.getTotalBooksCheckedout() >= Constants.MAX_BOOKS_ISSUED_TO_A_USER) {
+			System.out.println("The user has already checked-out maximum number of books");
+			return false;
+		}
+		BookReservation bookReservation = BookReservation.fetchReservationDetails(bookItem.getBarcode());
+		if (bookReservation != null && bookReservation.getMemberId() != this.getId()) {
+			// book item has a pending reservation from another user
+			System.out.println("This book is reserved by another member");
+			return false;
+		} else if (bookReservation != null) {
+			// book item has a pending reservation from the give member, update it
+			bookReservation.setStatus(ReservationStatus.COMPLETED);
+		}
+
+		if (!bookItem.checkout(this.getId())) {
+			return false;
+		}
+
+		this.incrementTotalBooksCheckedout();
+
+		return "SUCCESS";
+	}
+
+	@Override
+	public String returnBookItem(String bookItemBarcode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String renewBookItem(String bookItemBarcode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String payFine(String bookItemBarcode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
+}

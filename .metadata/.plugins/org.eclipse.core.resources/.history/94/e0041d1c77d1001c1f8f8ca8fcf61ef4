@@ -1,0 +1,13 @@
+package com.lms.accesslibrary.service;
+
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+
+@Service
+public interface BookService {
+	public CheckoutResponse addBook(Checkout checkout);
+	public CheckoutResponse removeBook(Checkout checkout);
+	public CheckoutResponse viewBookByCategory(Checkout checkout);	
+}

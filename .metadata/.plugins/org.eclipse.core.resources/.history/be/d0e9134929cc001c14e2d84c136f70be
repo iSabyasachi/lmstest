@@ -1,0 +1,10 @@
+package com.lms.accesslibrary.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.lms.accesslibrary.entity.library.user.Member;
+import com.lms.accesslibrary.entity.library.user.User;
+
+public interface UserRepository extends JpaRepository<Member, Long>{
+	User findByUserId(String userId);
+}

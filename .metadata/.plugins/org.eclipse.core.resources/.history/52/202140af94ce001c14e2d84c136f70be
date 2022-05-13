@@ -1,0 +1,14 @@
+package com.lms.accesslibrary.service;
+
+import org.springframework.stereotype.Component;
+
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+
+@Component
+public interface CheckoutService {
+	public CheckoutResponse checkoutBookItem(Checkout checkout);
+	public CheckoutResponse returnBookItem(Checkout checkout);
+	public CheckoutResponse renewBookItem(Checkout checkout);
+	public CheckoutResponse payFine(Checkout checkout);
+}

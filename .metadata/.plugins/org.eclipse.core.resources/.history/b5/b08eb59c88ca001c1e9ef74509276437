@@ -1,0 +1,16 @@
+package com.lms.accesslibrary.dto;
+
+@Data
+public class LendResponse {
+	private String lendTrackingNumber;
+
+	public String getLendTrackingNumber() {
+		return lendTrackingNumber;
+	}
+
+	public void setLendTrackingNumber(String lendTrackingNumber) {
+		this.lendTrackingNumber = lendTrackingNumber;
+	}
+	
+	
+}

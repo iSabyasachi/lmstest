@@ -1,0 +1,9 @@
+package com.lms.accesslibrary.service;
+
+import com.lms.accesslibrary.entity.library.book.BookItem;
+
+public interface MemberService {
+	public boolean checkoutBookItem(BookItem bookItem);
+	public void returnBookItem(BookItem bookItem);
+	public boolean renewBookItem(BookItem bookItem);
+}

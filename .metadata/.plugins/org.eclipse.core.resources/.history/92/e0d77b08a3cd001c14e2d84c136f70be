@@ -1,0 +1,10 @@
+package com.lms.accesslibrary.dao.factory;
+
+import com.lms.accesslibrary.dao.BookItemRepository;
+
+public abstract class GenericRepositoryFactory extends RepositoryFactory{
+
+	@Override
+	public abstract BookItemRepository getBookItemRepository();
+
+}

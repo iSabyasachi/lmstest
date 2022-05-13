@@ -1,0 +1,17 @@
+package com.lms.accesslibrary.service;
+
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+
+@Service
+public class CheckoutServiceImpl implements CheckoutService {
+
+	@Override
+	public CheckoutResponse checkoutBook(Checkout checkout) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

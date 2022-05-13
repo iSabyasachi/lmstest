@@ -1,0 +1,18 @@
+package com.lms.accesslibrary.dto;
+
+import java.util.Set;
+
+import com.lms.accesslibrary.entity.library.book.Book;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.entity.library.user.Address;
+import com.lms.accesslibrary.entity.library.user.Member;
+
+import lombok.Data;
+
+@Data
+public class Lend {
+	private Member member;
+    private Address memberAddress;    
+    private Book lend;
+    private Set<BookItem> bookItems;
+}

@@ -1,0 +1,210 @@
+package com.lms.accesslibrary.service;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lms.accesslibrary.bo.BookBO;
+import com.lms.accesslibrary.bo.BookItemBO;
+import com.lms.accesslibrary.bo.BookLending;
+import com.lms.accesslibrary.bo.BookReservation;
+import com.lms.accesslibrary.bo.Fine;
+import com.lms.accesslibrary.bo.UserBO;
+import com.lms.accesslibrary.constant.Constants;
+import com.lms.accesslibrary.dao.BookItemRepository;
+import com.lms.accesslibrary.dto.Checkout;
+import com.lms.accesslibrary.dto.CheckoutResponse;
+import com.lms.accesslibrary.entity.library.book.Book;
+import com.lms.accesslibrary.entity.library.book.BookItem;
+import com.lms.accesslibrary.entity.library.user.User;
+import com.lms.accesslibrary.enums.BookStatus;
+import com.lms.accesslibrary.enums.ReservationStatus;
+import com.lms.accesslibrary.enums.UserType;
+import com.lms.accesslibrary.utility.DateFormatUtility;
+
+@Service
+public class CheckoutServiceImpl implements CheckoutService {
+	
+	@Autowired
+	private CheckoutResponse response;
+	
+	@Autowired
+	private UserBO userBO;
+	
+	@Autowired
+	private BookItemBO bookItemBO;
+	
+	@Autowired
+	private BookBO bookBO;
+	
+	@Autowired
+	private BookItemRepository bookItemRepository;
+	
+	String errCode = "";
+	@Override
+	public CheckoutResponse checkoutBookItem(Checkout checkout) {
+		/*Find the librarian detail*/
+		
+		String librarianId = String.valueOf(checkout.getLibrarian().getId());		
+		User librarian = userBO.findByUserId(librarianId);
+		if(!librarian.getType().equals(UserType.LIBRARIAN.name())) {
+			response.setMessage("FAILED!!! User is not a Librarian.");	
+			return response; 
+		}
+		
+		/*Find the member detail*/
+		String userId = String.valueOf(checkout.getMember().getId());		
+		User member = userBO.findByUserId(userId);	
+		
+		if (member.getBooks()!= null && member.getBooks().size() >= Constants.MAX_BOOKS_ISSUED_TO_A_USER) {
+			errCode= "The user has already checked-out maximum number of books";
+			response.setMessage(errCode);			
+		}
+		
+		/*Find the Book Details*/
+		String isbn = checkout.getBook().getISBN();
+		Book book = bookBO.findByISBN(isbn);
+		
+		/*Create a new Book Item*/
+		BookItem bookItem = new BookItem();
+		
+		
+		/*Check the Reservation - start TO-DO*/
+		/*BookReservation bookReservation = BookReservation.fetchReservationDetails(book.getBarcode());
+		if (bookReservation != null && bookReservation.getUserId() != member.getId()) {
+			// book item has a pending reservation from another user
+			errCode = "This book is reserved by another member";
+			response.setMessage(errCode);	
+		} else if (bookReservation != null) {
+			// book item has a pending reservation from the give member, update it
+			bookReservation.setStatus(ReservationStatus.COMPLETED);
+		}
+		if (!bookItemBO.checkout(book, bookItem, user.getId())) {
+			response.setMessage("FAILED");	
+		}
+		*/
+		/*Check the Reservation - end		 
+		 * */
+		
+		bookItem.setLibrarianId((int)librarian.getId());
+		bookItem.setTrackingNumber(book.getBarcode());
+		bookItem.setBorrowedDate(new Date());
+		bookItem.setDueDate(DateFormatUtility.calculateDueDate());
+		bookItem.setStatus(BookStatus.LOANED.name());
+		bookItem.setActive(1);
+		bookItem.setUser(member);
+		Set<BookItem> bookItems = member.getBooks();
+		bookItems.add(bookItem);
+		
+		bookItemRepository.save(bookItem);
+		
+		response.setMessage(bookItem.getTrackingNumber());	
+		return response;
+	}
+
+	@Override
+	public CheckoutResponse returnBookItem(Checkout checkout) {		
+		/*Find the librarian detail*/
+		
+		String librarianId = String.valueOf(checkout.getLibrarian().getId());		
+		User librarian = userBO.findByUserId(librarianId);
+		if(!librarian.getType().equals(UserType.LIBRARIAN.name())) {
+			response.setMessage("FAILED!!! User is not a Librarian.");	
+			return response; 
+		}
+		
+		/*Find the member detail*/
+		String userId = String.valueOf(checkout.getMember().getId());		
+		User member = userBO.findByUserId(userId);	
+		
+		Book book = bookBO.findByISBN(bookItem.getTrackingNumber());		
+		
+		this.checkForFine(book.getBarcode());
+		BookReservation bookReservation = BookReservation.fetchReservationDetails(book.getBarcode());
+		if (bookReservation != null) {
+			// book item has a pending reservation
+			bookItem.setStatus(BookStatus.RESERVED.name());
+			bookReservation.sendBookAvailableNotification();
+		}
+		bookItem.setStatus(BookStatus.AVAILABLE.name());
+		user.getBooks().remove(bookItem);
+		double fineAmount = this.checkForFine(book.getBarcode());
+		user.setTotalFine(fineAmount);		
+		userBO.save(user);
+		bookItemBO.save(bookItem);
+		response.setMessage("SUCCESS");	
+		return response;
+	}
+	private double checkForFine(String bookItemBarcode) {
+		double fineAmount = 0.00;
+		BookLending bookLending = BookLending.fetchLendingDetails(bookItemBarcode);
+		Date dueDate = bookLending.getDueDate();
+		Date today = new Date();
+		// check if the book has been returned within the due date
+		if (today.compareTo(dueDate) > 0) {
+			long diff = today.getTime() - dueDate.getTime();
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			fineAmount = Fine.collectFine(bookLending.getUserId(), diffDays);
+		}
+		return fineAmount;
+	}
+
+	@Override
+	public CheckoutResponse renewBookItem(Checkout checkout) {
+		String userId = checkout.getUserId();		
+		User user = userBO.findByUserId(userId);
+		
+		String barCode = checkout.getBarCode();
+		BookItem bookItem = bookItemBO.findByBarcode(barCode);
+		
+		Book book = bookBO.findByISBN(bookItem.getTrackingNumber());		
+		
+		BookReservation bookReservation = BookReservation.fetchReservationDetails(book.getBarcode());
+		// check if this book item has a pending reservation from another member
+		if (bookReservation != null && bookReservation.getUserId() != user.getId()) {
+			errCode = "This book is reserved by another member";			
+			user.getBooks().remove(bookItem);
+			double fineAmount = this.checkForFine(book.getBarcode());
+			user.setTotalFine(fineAmount);
+			userBO.save(user);			
+			
+			bookItem.setStatus(BookStatus.RESERVED.name());
+			bookItemBO.save(bookItem);
+			bookReservation.sendBookAvailableNotification();
+			response.setMessage(errCode);
+		} else if (bookReservation != null) {
+			// book item has a pending reservation from this member
+			bookReservation.setStatus(ReservationStatus.COMPLETED);
+		}
+		BookLending.lendBook(book.getBarcode(), user.getId());
+		LocalDate localDate = LocalDate.now().plusDays(Constants.MAX_LENDING_DAYS);
+	    bookItem.setDueDate(DateFormatUtility.convertToDateViaInstant(localDate));
+	    
+	    response.setMessage("SUCCESS");
+	    return response;
+	}
+
+	@Override
+	public CheckoutResponse payFine(Checkout checkout) {
+		String userId = checkout.getUserId();		
+		User user = userBO.findByUserId(userId);
+		
+		String barCode = checkout.getBarCode();		
+		double totalFine = checkForFine(barCode);
+		if(totalFine != user.getFinePaid()) {
+			errCode = "Incorrect fine amount!!!";
+			response.setMessage(errCode);
+		}else {
+			user.setTotalFine(0.00);
+		}		
+		response.setMessage("SUCCESS");
+	    return response;
+	}
+
+	
+
+}

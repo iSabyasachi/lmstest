@@ -1,0 +1,14 @@
+package com.lms.accesslibrary.bo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lms.accesslibrary.dao.UserRepository;
+
+@Component
+public class User {
+	@Autowired
+	UserRepository userRepository;
+	
+
+}

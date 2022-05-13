@@ -1,0 +1,9 @@
+package com.lms.accesslibrary.dao.factory;
+
+import com.lms.accesslibrary.dao.BookItemRepository;
+
+public class GenericRepositoryFactory{
+
+	
+
+}
