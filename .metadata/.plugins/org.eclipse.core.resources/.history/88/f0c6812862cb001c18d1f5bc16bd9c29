@@ -1,7 +1,0 @@
-package com.lms.accesslibrary.service;
-
-import com.lms.accesslibrary.dto.Checkout;
-
-public interface CheckoutService {
-	public boolean checkoutBook(Checkout checkout);
-}

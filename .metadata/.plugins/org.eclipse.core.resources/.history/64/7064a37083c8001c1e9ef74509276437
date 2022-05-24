@@ -1,5 +1,0 @@
-package com.lms.accesslibrary.entity;
-
-public class Librarian extends Account{
-
-}

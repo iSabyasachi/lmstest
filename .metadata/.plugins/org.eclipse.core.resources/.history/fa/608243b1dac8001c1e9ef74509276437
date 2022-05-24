@@ -1,5 +1,0 @@
-package com.lms.accesslibrary.entity.library.user;
-
-public class BookReservation {
-
-}

@@ -1,7 +1,0 @@
-package com.lms.accesslibrary.dao;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface BookRepository extends JpaRepository<Book, String>{
-
-}

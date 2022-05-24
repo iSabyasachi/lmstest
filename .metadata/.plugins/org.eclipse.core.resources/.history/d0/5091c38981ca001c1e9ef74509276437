@@ -1,6 +1,0 @@
-package com.lms.accesslibrary.entity.library.section;
-
-public class Rack {
-	private int number;
-	private String locationIdentifier;
-}

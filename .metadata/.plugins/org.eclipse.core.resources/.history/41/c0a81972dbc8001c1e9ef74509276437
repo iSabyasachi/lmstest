@@ -1,7 +1,0 @@
-package com.lms.accesslibrary.bo;
-
-public class Fine {
-	private Date creationDate;
-	private double bookItemBarcode;
-	private String memberId;
-}

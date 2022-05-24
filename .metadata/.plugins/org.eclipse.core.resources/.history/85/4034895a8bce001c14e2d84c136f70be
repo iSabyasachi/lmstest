@@ -1,5 +1,0 @@
-package com.lms.accesslibrary.entity.library;
-
-public class BaseEntity {
-
-}

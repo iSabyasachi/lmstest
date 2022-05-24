@@ -1,9 +1,0 @@
-package com.lms.accesslibrary.dto;
-
-import org.springframework.stereotype.Component;
-
-@Data
-@Component
-public class Response {
-
-}

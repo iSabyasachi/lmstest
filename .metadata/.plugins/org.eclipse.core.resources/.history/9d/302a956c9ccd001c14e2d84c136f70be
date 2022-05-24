@@ -1,5 +1,0 @@
-package com.lms.accesslibrary.dao.factory;
-
-public abstract class DAOFactory {
-
-}

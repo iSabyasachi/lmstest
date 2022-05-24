@@ -1,8 +1,0 @@
-package com.lms.accesslibrary.entity.library.user;
-
-public class BookReservation {
-	private Date creationDate;
-	  private ReservationStatus status;
-	  private String bookItemBarcode;
-	  private String memberId;
-}
